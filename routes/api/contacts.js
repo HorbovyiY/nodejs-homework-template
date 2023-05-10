@@ -4,22 +4,36 @@ const router = express.Router();
 
 
 router.get('/', async (req, res, next) => {
-  const allContacts = await contactsFunctions.listContacts();
-  res.json(allContacts);
+  try {
+    const allContacts = await contactsFunctions.listContacts();
+    res.json(allContacts);
+  } catch (error) { 
+    next(error);
+  }
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  const contact = await contactsFunctions.getContactById(req.id);
-  res.json(contact);
-})
+  try {
+    const contact = await contactsFunctions.getContactById(req.params.contactId);
+    if (!contact) { 
+      return res.status(404).json({message: "Not found"})
+    }
+    res.json(contact);
+  } catch (error) {
+    next(error);
+  }})
 
 router.post('/', async (req, res, next) => {
-  const newContact = await contactsFunctions.addContact(req);
-  res.json(newContact);
+  try {
+    const newContact = await contactsFunctions.addContact(req.body);
+    res.status(201).json(newContact);
+  } catch (error) {
+    next(error);
+  }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  const deletedContact = await contactsFunctions.removeContact(req.id);
+  const deletedContact = await contactsFunctions.removeContact(req.params.contactId);
   res.json(deletedContact);
 })
 
