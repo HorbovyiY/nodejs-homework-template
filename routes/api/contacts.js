@@ -46,22 +46,26 @@ router.post('/', async (req, res, next) => {
 })
 
 router.delete('/:id', async (req, res, next) => {
-  const deletedContact = await contactsFunctions.removeContact(req.params.id);
-  res.json(deletedContact);
+  try {
+    const deletedContact = await contactsFunctions.removeContact(req.params.id);
+    if (!deletedContact) { throw HttpError(404, "Not Found");}
+    res.status(200).json({message: "contact deleted"});
+  } catch (error) {
+    next(error);
+  }
 })
 
 router.put('/:id', async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) { 
-      throw HttpError(400, "missing required name field");
+      throw HttpError(400, "missing fields");
     }
     
     const updatedContact = await contactsFunctions.updateContact(req.params.id, req.body);
     if (!updatedContact) { throw HttpError(404, "Not Found");}
-
-    res.json(updatedContact);
-  } catch (error) {
+    res.status(200).json(updatedContact);
+  } catch (error) { 
     next(error);
   }
 })
