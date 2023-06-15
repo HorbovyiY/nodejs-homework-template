@@ -1,5 +1,5 @@
-const { Contact} = require("../../models/contact");
-const { HttpError, ctrlWrapper } = require("../../helpers");
+const { Contact} = require("../models/contact");
+const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {
         const allContacts = await Contact.find();
@@ -19,28 +19,33 @@ const add = async (req, res) => {
     res.status(201).json(newContact);
 }
 
-// const deleteById = async (req, res) => {
-//     const deletedContact = await contactsFunctions.removeContact(req.params.id);
-//     if (!deletedContact) { throw HttpError(404, "Not Found");}
-//     res.status(200).json({message: "contact deleted"});
-// }
+const deleteById = async (req, res) => {
+    const deletedContact = await Contact.findByIdAndRemove(req.params.id);
+    if (!deletedContact) { throw HttpError(404, "Not Found");}
+    res.status(200).json({message: "contact deleted"});
+}
 
-// const updateById=async (req, res) => {
-//     const { error } = shemas.addSchema.validate(req.body);
-//     if (error) { 
-//       throw HttpError(400, "missing fields");
-//     }
-    
-//     const updatedContact = await contactsFunctions.updateContact(req.params.id, req.body);
-//     if (!updatedContact) { throw HttpError(404, "Not Found");}
-//     res.status(200).json(updatedContact);
-// }
+const updateById = async (req, res) => {
+    const updatedContact = await Contact.findByIdAndUpdate(req.params.id, req.body, {new: true});
+    if (!updatedContact) {
+        throw HttpError(404, "Not Found");
+    }
+    res.status(200).json(updatedContact);
+}
 
+const updateFavorite = async (req, res) => {
+    const updatedContact = await Contact.findByIdAndUpdate(req.params.id, req.body, {new: true});
+    if (!updatedContact) {
+        throw HttpError(404, "Not Found");
+    }
+    res.status(200).json(updatedContact);
+}
 
 module.exports = {
     getAll: ctrlWrapper(getAll),
     getById: ctrlWrapper(getById),
     add: ctrlWrapper(add),
-    // deleteById: ctrlWrapper(deleteById),
-    // updateById: ctrlWrapper(updateById),
+    deleteById: ctrlWrapper(deleteById),
+    updateById: ctrlWrapper(updateById),
+    updateFavorite: ctrlWrapper(updateFavorite),
 }
