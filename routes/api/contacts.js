@@ -15,16 +15,16 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-// router.get('/:id', async (req, res, next) => {
-//   try {
-//     const contact = await contactsFunctions.getContactById(req.params.id);
-//     if (!contact) { 
-//       throw HttpError(404, "Not Found");
-//     }
-//     res.status(200).json(contact);
-//   } catch (error) {
-//     next(error);
-//   }})
+router.get('/:id', async (req, res, next) => {
+  try {
+    const contact = await Contact.findById(req.params.id);
+    if (!contact) { 
+      throw HttpError(404, "Not Found");
+    }
+    res.status(200).json(contact);
+  } catch (error) {
+    next(error);
+  }})
 
 router.post('/', async (req, res, next) => {
   try {
