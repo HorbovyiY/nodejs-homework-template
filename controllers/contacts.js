@@ -1,6 +1,5 @@
-const { Contact, shemas } = require("../../models/contact");
+const { Contact} = require("../../models/contact");
 const { HttpError, ctrlWrapper } = require("../../helpers");
-const { isValidId } = require("../../middlewares");
 
 const getAll = async (req, res) => {
         const allContacts = await Contact.find();
@@ -15,12 +14,7 @@ const getById = async (req, res) => {
         res.status(200).json(contact);
 }
     
-const add= async (req, res) => {
-        const { error } = shemas.addSchema.validate(req.body);
-    if (error) { 
-        throw HttpError(400, "missing required name field");
-    }
-
+const add = async (req, res) => {
     const newContact = await Contact.create(req.body);
     res.status(201).json(newContact);
 }
