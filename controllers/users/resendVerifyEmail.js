@@ -23,7 +23,7 @@ const resendVerifyEmail = async (req, res) => {
 
     await sendEmail(verifyEmail);
 
-    res.json({message: "Verify link send success"})
+    res.status(200).json({message: "Verification email sent"})
 }
 
 module.exports = {
