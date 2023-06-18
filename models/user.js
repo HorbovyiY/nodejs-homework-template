@@ -38,8 +38,13 @@ const authSchema = Joi.object({
     email: Joi.string().required(),
 });
 
+const emailSchema = Joi.object({
+    email: Joi.string().required(),
+});
+
 const schemas = {
-    authSchema
+    authSchema,
+    emailSchema,
 }
 
 const User = model("user", userSchema);
